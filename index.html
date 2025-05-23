@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8" />
+<title>تم الاختراق</title>
+<style>
+  body {
+    margin: 0;
+    background: black;
+    color: red;
+    font-family: 'Courier New', monospace;
+    font-size: 22px;
+    text-align: center;
+    padding-top: 10%;
+    overflow: hidden;
+  }
+  #output {
+    max-width: 800px;
+    margin: auto;
+    white-space: pre-wrap;
+    min-height: 200px;
+  }
+  #countdown {
+    font-size: 28px;
+    margin-top: 20px;
+  }
+  .shake {
+    animation: shake 0.5s infinite;
+  }
+  @keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }
+  #fakeScreen {
+    display: none;
+    background: black;
+    color: red;
+    font-family: 'Courier New', monospace;
+    font-size: 30px;
+    text-align: center;
+    padding-top: 20%;
+    height: 100vh;
+  }
+  #startBtn {
+    margin-top: 40vh;
+    font-size: 24px;
+    padding: 15px 40px;
+    background: red;
+    color: black;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 8px;
+  }
+</style>
+</head>
+<body>
+<button id="startBtn">ابدأ الاختراق</button>
+
+<div id="output"></div>
+<div id="countdown"></div>
+<div id="fakeScreen">تم الاختراق بنجاح.<br>جميع بياناتك تحت السيطرة.</div>
+
+<audio id="alarm" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
+
+<script>
+  const lines = [
+    "جارٍ الاتصال بالجهاز...",
+    "تم الوصول إلى النظام.",
+    "تحميل ملفات النظام...",
+    "تشغيل أدوات الاختراق...",
+    "الوصول إلى الجذر (root access granted)...",
+    "جارٍ تنفيذ التعليمات...",
+    "سيتم اختراق جهازك بعد 10 ثواني..."
+  ];
+
+  const output = document.getElementById('output');
+  const countdownEl = document.getElementById('countdown');
+  const fakeScreen = document.getElementById('fakeScreen');
+  const alarm = document.getElementById('alarm');
+  const startBtn = document.getElementById('startBtn');
+
+  let i = 0;
+  let interval;
+
+  function typeLines() {
+    if (i < lines.length) {
+      const line = document.createElement('div');
+      line.textContent = lines[i];
+      output.appendChild(line);
+      i++;
+      setTimeout(typeLines, 1500);
+    } else {
+      startCountdown(10);
+    }
+  }
+
+  function startCountdown(seconds) {
+    alarm.play().catch(() => {});
+    countdownEl.textContent = `العد التنازلي: ${seconds} ثانية`;
+    let count = seconds;
+
+    interval = setInterval(() => {
+      count--;
+      countdownEl.textContent = `العد التنازلي: ${count} ثانية`;
+
+      if (count <= 10 && count > 0) {
+        document.body.classList.add('shake');
+      }
+
+      if (count <= 0) {
+        clearInterval(interval);
+        document.body.classList.remove('shake');
+        output.style.display = 'none';
+        countdownEl.style.display = 'none';
+        fakeScreen.style.display = 'block';
+        alarm.pause();
+        alarm.currentTime = 0;
+      }
+    }, 1000);
+  }
+
+  startBtn.addEventListener('click', () => {
+    startBtn.style.display = 'none';
+    typeLines();
+  });
+</script>
+</body>
+</html>
+
+>
